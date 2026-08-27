@@ -10,11 +10,12 @@
   <img src="https://img.shields.io/badge/bash-3.2%2B-yellowgreen.svg" alt="Bash 3.2+">
   <img src="https://img.shields.io/badge/deps-0-orange.svg" alt="Zero dependency">
   <a href="https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch/actions"><img src="https://img.shields.io/github/actions/workflow/status/XinWoRen-Global/xinworen-yaml-mode-switch/ci.yml?branch=main" alt="CI"></a>
+  <a href="https://xinworen.com"><img src="https://img.shields.io/badge/website-xinworen.com-7c3aed.svg" alt="Website: xinworen.com"></a>
 </p>
 
 <p align="center">
   <b>由 XinWoRen 出品</b> · 面向企业级部署的通用「配置热开关」工程底座 ·
-  <a href="https://github.com/XinWoRen-Global">github.com/XinWoRen-Global</a>
+  <a href="https://github.com/XinWoRen-Global">github.com/XinWoRen-Global</a> · 项目官网 <a href="https://xinworen.com">xinworen.com</a>
 </p>
 
 > 本工具是一个通用、安全、幂等的配置热开关 CLI，纯 bash + sed 实现、零依赖，可挂载到任意运行时作为「配置热加载」的入口。不绑定任何平台、模型或密钥 — 从生产环境沉淀、脱敏后开源。
