@@ -21,7 +21,7 @@
 >
 > A generic, dependency-free shell CLI to hot-toggle boolean/value keys in a YAML config. Extracted from production and open-sourced without any platform/model/secret coupling.
 
-**海内外镜像 / Mirrors** · [GitHub](https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch) · [Gitee](https://gitee.com/xinworen/xinworen-yaml-mode-switch) · [极狐 GitLab](https://jihulab.com/xinworen/xinworen-yaml-mode-switch) — 可从你所在区域的任意镜像拉取 / 访问。
+**海内外镜像 / Mirrors** · [GitHub](https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch) · [Gitee](https://gitee.com/xinworen_0/xinworen-yaml-mode-switch) · [Hugging Face](https://huggingface.co/datasets/CuiwuYang/xinworen-yaml-mode-switch) — 可从你所在区域的任意镜像拉取 / 访问。
 
 ---
 
