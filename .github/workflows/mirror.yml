@@ -20,6 +20,7 @@ jobs:
       # ── Gitee（码云） ──
       - name: Mirror to Gitee
         if: ${{ env.GITEE_TOKEN != '' }}
+        continue-on-error: true
         env:
           GITEE_USER: ${{ secrets.GITEE_USER }}
           GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
@@ -32,6 +33,7 @@ jobs:
       # 目标须为已存在的数据集/仓库（免费创建）。namespace = HF 用户名。
       - name: Mirror to Hugging Face
         if: ${{ env.HF_TOKEN != '' }}
+        continue-on-error: true
         env:
           HF_USER: ${{ secrets.HF_USER }}
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
@@ -44,6 +46,7 @@ jobs:
       # 仓库须已存在（Codeberg 新号自动建仓常被 403）。namespace = Codeberg 用户名。
       - name: Mirror to Codeberg
         if: ${{ env.CODEBERG_TOKEN != '' }}
+        continue-on-error: true
         env:
           CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
           CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
@@ -56,6 +59,7 @@ jobs:
       # 仓库已通过 Gitee 兼容 API /api/v5 自动创建。namespace = GitCode 用户名句柄。
       - name: Mirror to GitCode
         if: ${{ env.GITCODE_TOKEN != '' }}
+        continue-on-error: true
         env:
           GITCODE_USER: ${{ secrets.GITCODE_USER }}
           GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
