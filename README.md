@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/xinworen-logo.svg" width="96" alt="XinWoRen">
+  <img src="assets/xinworen-logo.png" width="96" alt="XinWoRen">
 </p>
 
 <h1 align="center">xinworen-yaml-mode-switch</h1>
