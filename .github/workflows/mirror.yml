@@ -10,7 +10,7 @@ on:
 
 jobs:
   sync:
-    name: mirror to Gitee / 极狐
+    name: mirror to Gitee / HF / Codeberg / GitCode
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -28,16 +28,6 @@ jobs:
           git push --force gitee main
           git remote remove gitee
 
-      # ── 极狐 GitLab（中国大陆） ──
-      - name: Mirror to 极狐 GitLab
-        if: ${{ env.GLAB_CN_TOKEN != '' }}
-        env:
-          GLAB_CN_TOKEN: ${{ secrets.GLAB_CN_TOKEN }}
-        run: |
-          git remote add glab "https://oauth2:${GLAB_CN_TOKEN}@jihulab.com/xinworen/xinworen-yaml-mode-switch.git"
-          git push --force glab main
-          git remote remove glab
-
       # ── Hugging Face（AI 社区曝光，免费） ──
       # 目标须为已存在的数据集/仓库（免费创建）。namespace = HF 用户名。
       - name: Mirror to Hugging Face
@@ -49,3 +39,27 @@ jobs:
           git remote add hf "https://${HF_USER}:${HF_TOKEN}@huggingface.co/datasets/${HF_USER}/xinworen-yaml-mode-switch.git"
           git push --force hf main
           git remote remove hf
+
+      # ── Codeberg（欧盟/全球 OSS 社区，免费） ──
+      # 仓库须已存在（Codeberg 新号自动建仓常被 403）。namespace = Codeberg 用户名。
+      - name: Mirror to Codeberg
+        if: ${{ env.CODEBERG_TOKEN != '' }}
+        env:
+          CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
+          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+        run: |
+          git remote add codeberg "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/${CODEBERG_USER}/xinworen-yaml-mode-switch.git"
+          git push --force codeberg main
+          git remote remove codeberg
+
+      # ── GitCode / CSDN（中国大陆，全局镜像） ──
+      # 仓库已通过 Gitee 兼容 API /api/v5 自动创建。namespace = GitCode 用户名句柄。
+      - name: Mirror to GitCode
+        if: ${{ env.GITCODE_TOKEN != '' }}
+        env:
+          GITCODE_USER: ${{ secrets.GITCODE_USER }}
+          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
+        run: |
+          git remote add gitcode "https://${GITCODE_USER}:${GITCODE_TOKEN}@gitcode.com/${GITCODE_USER}/xinworen-yaml-mode-switch.git"
+          git push --force gitcode main
+          git remote remove gitcode
