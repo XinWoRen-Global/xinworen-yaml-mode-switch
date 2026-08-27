@@ -1,0 +1,38 @@
+# 海内外多仓镜像同步
+# Push 到 main 后，自动把代码同步到 Gitee 与极狐 GitLab，扩大宣传覆盖。
+# 凭证通过仓库 Secrets 注入；未配置对应平台时对应步骤自动跳过，不影响主线。
+name: mirror
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  sync:
+    name: mirror to Gitee / 极狐
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # ── Gitee（码云） ──
+      - name: Mirror to Gitee
+        if: ${{ env.GITEE_TOKEN != '' }}
+        env:
+          GITEE_USER: ${{ secrets.GITEE_USER }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          git remote add gitee "https://${GITEE_USER}:${GITEE_TOKEN}@gitee.com/${GITEE_USER}/xinworen-yaml-mode-switch.git"
+          git push --force gitee main
+          git remote remove gitee
+
+      # ── 极狐 GitLab（中国大陆） ──
+      - name: Mirror to 极狐 GitLab
+        if: ${{ env.GLAB_CN_TOKEN != '' }}
+        env:
+          GLAB_CN_TOKEN: ${{ secrets.GLAB_CN_TOKEN }}
+        run: |
+          git remote add glab "https://oauth2:${GLAB_CN_TOKEN}@jihulab.com/xinworen/xinworen-yaml-mode-switch.git"
+          git push --force glab main
+          git remote remove glab

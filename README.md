@@ -1,11 +1,27 @@
-# yaml-mode-switch
+<h1 align="center">xinworen-yaml-mode-switch</h1>
 
-> 免重启热切换 YAML 配置中的布尔/值开关（bash + sed，无外部依赖）。
-> A dependency-free shell CLI to hot-toggle boolean/value keys in a YAML config without restarting your service.
+<p align="center">
+  <b>免重启热切换 YAML 配置 · Hot-toggle YAML config without restart</b><br/>
+  <span>bash + sed · 零外部依赖 · 幂等 · 可回滚</span>
+</p>
 
-由 XinWoRen 出品，从生产环境沉淀的通用工程工具脱敏开源。本仓库不绑定任何平台、模型或密钥，可作为任意运行时「配置热开关」的通用入口。
+<p align="center">
+  <a href="https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg" alt="License: MIT"></a>
+  <img src="https://img.shields.io/badge/bash-3.2%2B-yellowgreen.svg" alt="Bash 3.2+">
+  <img src="https://img.shields.io/badge/deps-0-orange.svg" alt="Zero dependency">
+  <a href="https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch/actions"><img src="https://img.shields.io/github/actions/workflow/status/XinWoRen-Global/xinworen-yaml-mode-switch/ci.yml?branch=main" alt="CI"></a>
+</p>
 
-Built by [XinWoRen](https://github.com/XinWoRen-Global). It is a generic engineering utility extracted from production — no platform, model, or secret coupling.
+<p align="center">
+  <b>由 XinWoRen 出品</b> · 面向企业级部署的通用「配置热开关」工程底座 ·
+  <a href="https://github.com/XinWoRen-Global">github.com/XinWoRen-Global</a>
+</p>
+
+> 本工具是一个通用、安全、幂等的配置热开关 CLI，纯 bash + sed 实现、零依赖，可挂载到任意运行时作为「配置热加载」的入口。不绑定任何平台、模型或密钥 — 从生产环境沉淀、脱敏后开源。
+>
+> A generic, dependency-free shell CLI to hot-toggle boolean/value keys in a YAML config. Extracted from production and open-sourced without any platform/model/secret coupling.
+
+**海内外镜像 / Mirrors** · [GitHub](https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch) · [Gitee](https://gitee.com/xinworen/xinworen-yaml-mode-switch) · [极狐 GitLab](https://jihulab.com/xinworen/xinworen-yaml-mode-switch) — 可从你所在区域的任意镜像拉取 / 访问。
 
 ---
 
@@ -22,7 +38,7 @@ Built by [XinWoRen](https://github.com/XinWoRen-Global). It is a generic enginee
 ## 安装 / Install
 
 ```bash
-curl -o yaml-mode-switch.sh https://raw.githubusercontent.com/XinWoRen-Global/yaml-mode-switch/main/yaml-mode-switch.sh
+curl -o yaml-mode-switch.sh https://raw.githubusercontent.com/XinWoRen-Global/xinworen-yaml-mode-switch/main/yaml-mode-switch.sh
 chmod +x yaml-mode-switch.sh
 ```
 
