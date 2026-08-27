@@ -36,3 +36,15 @@ jobs:
           git remote add glab "https://oauth2:${GLAB_CN_TOKEN}@jihulab.com/xinworen/xinworen-yaml-mode-switch.git"
           git push --force glab main
           git remote remove glab
+
+      # ── Hugging Face（AI 社区曝光，免费） ──
+      # 目标须为已存在的数据集/仓库（免费创建）。namespace = HF 用户名。
+      - name: Mirror to Hugging Face
+        if: ${{ env.HF_TOKEN != '' }}
+        env:
+          HF_USER: ${{ secrets.HF_USER }}
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+        run: |
+          git remote add hf "https://${HF_USER}:${HF_TOKEN}@huggingface.co/datasets/${HF_USER}/xinworen-yaml-mode-switch.git"
+          git push --force hf main
+          git remote remove hf
