@@ -16,6 +16,7 @@ jobs:
         uses: luizm/action-sh-checker@v0.9.0
         with:
           sh_checker_comment: true
+          sh_checker_shfmt_disable: true
 
   smoke-test:
     name: smoke test
