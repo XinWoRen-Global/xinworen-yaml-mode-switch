@@ -157,13 +157,12 @@ if [ "$DRY_RUN" -eq 1 ]; then
     exit 0
 fi
 
-# ── 实际写入：先备份，再 sed 原子改写；不存在则追加 ──
+# ── 实际写入：先备份（cp 与 sed -i.bak 都会在 ${CONFIG}.bak 保留改动前内容），再改写；不存在则追加 ──
 cp "$CONFIG" "${CONFIG}.bak"
 if [ "$EXISTS" -eq 1 ]; then
     sed -E -i.bak "/^[[:space:]]*${KEY_ESC}:/s/(^[[:space:]]*${KEY_ESC}:)[[:space:]]*.*/\1 $NORMALIZED_VALUE/" "$CONFIG"
 else
     printf "\n%s: %s\n" "$KEY" "$NORMALIZED_VALUE" >> "$CONFIG"
 fi
-rm -f "${CONFIG}.bak"
 
 echo "[$LOG_PREFIX] 已设置 $KEY = $NORMALIZED_VALUE -> $CONFIG （备份: $CONFIG.bak，热生效）"
