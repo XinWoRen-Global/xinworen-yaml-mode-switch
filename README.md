@@ -26,7 +26,7 @@
 >
 > A generic, dependency-free shell CLI to hot-toggle boolean/value keys in a YAML config. Extracted from production and open-sourced without any platform/model/secret coupling.
 
-**海内外镜像 / Mirrors** · [GitHub](https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch) · [Gitee](https://gitee.com/xinworen_0/xinworen-yaml-mode-switch) · [Hugging Face](https://huggingface.co/datasets/CuiwuYang/xinworen-yaml-mode-switch) · [Codeberg](https://codeberg.org/cuiwuyang/xinworen-yaml-mode-switch) · [GitCode](https://gitcode.com/qq_36567311/xinworen-yaml-mode-switch) · [SourceForge](https://sourceforge.net/p/xinworen-yaml-mode-switch) — 可从你所在区域的任意镜像拉取 / 访问。官网 / Website: [xinworen.com](https://xinworen.com)
+**海内外镜像 / Mirrors** · [GitHub](https://github.com/XinWoRen-Global/xinworen-yaml-mode-switch) · [Gitee](https://gitee.com/xinworen_0/xinworen-yaml-mode-switch) · [Hugging Face](https://huggingface.co/datasets/XinWoRen/xinworen-yaml-mode-switch) · [Codeberg](https://codeberg.org/cuiwuyang/xinworen-yaml-mode-switch) · [GitCode](https://gitcode.com/qq_36567311/xinworen-yaml-mode-switch) · [SourceForge](https://sourceforge.net/p/xinworen-yaml-mode-switch) — 可从你所在区域的任意镜像拉取 / 访问。官网 / Website: [xinworen.com](https://xinworen.com)
 
 ---
 

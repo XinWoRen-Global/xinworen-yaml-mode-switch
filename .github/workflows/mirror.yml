@@ -1,6 +1,14 @@
 # 海内外多仓镜像同步
-# Push 到 main 后，自动把代码同步到 Gitee 与极狐 GitLab，扩大宣传覆盖。
+# Push 到 main 后，自动把代码同步到 Gitee / HF / Codeberg / GitCode，扩大宣传覆盖。
 # 凭证通过仓库 Secrets 注入；未配置对应平台时对应步骤自动跳过，不影响主线。
+#
+# ⚠️ 关键约束（2026-09-03 修复）：
+#   1. 所有 secrets 必须在 **job 级 env** 声明。step 级 `env` 在该 step 自己的 `if:`
+#      求值时**不可见**，会导致 `if: env.XXX != ''` 恒为 false → 步骤被静默跳过。
+#   2. Hugging Face 命名空间固定为组织 `XinWoRen`（数据集已于 2026-09-03 从个人账号
+#      CuiwuYang 转移到组织）。HF git 鉴权只认 token，用户名位可为任意值，因此不依赖
+#      secrets.HF_USER 拼 URL，避免命名空间退回个人账号。
+
 name: mirror
 
 on:
@@ -12,6 +20,15 @@ jobs:
   sync:
     name: mirror to Gitee / HF / Codeberg / GitCode
     runs-on: ubuntu-latest
+    env:
+      GITEE_USER: ${{ secrets.GITEE_USER }}
+      GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+      HF_USER: ${{ secrets.HF_USER }}
+      HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
+      CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
+      GITCODE_USER: ${{ secrets.GITCODE_USER }}
+      GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -21,24 +38,20 @@ jobs:
       - name: Mirror to Gitee
         if: ${{ env.GITEE_TOKEN != '' }}
         continue-on-error: true
-        env:
-          GITEE_USER: ${{ secrets.GITEE_USER }}
-          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
         run: |
           git remote add gitee "https://${GITEE_USER}:${GITEE_TOKEN}@gitee.com/${GITEE_USER}/xinworen-yaml-mode-switch.git"
           git push --force gitee main
           git remote remove gitee
 
       # ── Hugging Face（AI 社区曝光，免费） ──
-      # 目标须为已存在的数据集/仓库（免费创建）。namespace = HF 用户名。
+      # 目标：组织 XinWoRen 下的数据集仓库（须已存在）。
+      # 鉴权：HF git 只看 token；用户名位缺省用 token 自身，避免 HF_USER 仍是 CuiwuYang 时出错。
       - name: Mirror to Hugging Face
         if: ${{ env.HF_TOKEN != '' }}
         continue-on-error: true
-        env:
-          HF_USER: ${{ secrets.HF_USER }}
-          HF_TOKEN: ${{ secrets.HF_TOKEN }}
         run: |
-          git remote add hf "https://${HF_USER}:${HF_TOKEN}@huggingface.co/datasets/${HF_USER}/xinworen-yaml-mode-switch.git"
+          HF_AUTH_USER="${HF_USER:-${HF_TOKEN}}"
+          git remote add hf "https://${HF_AUTH_USER}:${HF_TOKEN}@huggingface.co/datasets/XinWoRen/xinworen-yaml-mode-switch.git"
           git push --force hf main
           git remote remove hf
 
@@ -47,9 +60,6 @@ jobs:
       - name: Mirror to Codeberg
         if: ${{ env.CODEBERG_TOKEN != '' }}
         continue-on-error: true
-        env:
-          CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
-          CODEBERG_TOKEN: ${{ secrets.CODEBERG_TOKEN }}
         run: |
           git remote add codeberg "https://${CODEBERG_USER}:${CODEBERG_TOKEN}@codeberg.org/${CODEBERG_USER}/xinworen-yaml-mode-switch.git"
           git push --force codeberg main
@@ -60,9 +70,6 @@ jobs:
       - name: Mirror to GitCode
         if: ${{ env.GITCODE_TOKEN != '' }}
         continue-on-error: true
-        env:
-          GITCODE_USER: ${{ secrets.GITCODE_USER }}
-          GITCODE_TOKEN: ${{ secrets.GITCODE_TOKEN }}
         run: |
           git remote add gitcode "https://${GITCODE_USER}:${GITCODE_TOKEN}@gitcode.com/${GITCODE_USER}/xinworen-yaml-mode-switch.git"
           git push --force gitcode main
