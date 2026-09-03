@@ -17,6 +17,11 @@
 #  3. Hugging Face 的 pre-receive 钩子**拒绝任何含二进制文件（PNG 等）的 git 推送**，
 #     要求改用 Xet 存储。本仓库 assets/ 下有 3 个 PNG logo，直接 git push 必然被拒。
 #     → 对策：HF 步骤改为推送「纯文本快照」（排除二进制，保留 SVG/代码/文档）。
+#
+#  4. Gitee 企业版禁用 HTTPS git（2026-09-03）：账号归属企业后，
+#     `git push https://...` 恒定 403 "Pull/Push via HTTPS is forbidden due to
+#     enterprise's security setting"，且 Gitee 仓库级部署公钥**恒只读**。
+#     → 对策：Gitee 走 SSH + 个人公钥（secrets.GITEE_SSH_KEY），详见该步骤内注释。
 
 name: mirror
 
@@ -32,6 +37,7 @@ jobs:
     env:
       GITEE_USER: ${{ secrets.GITEE_USER }}
       GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+      GITEE_SSH_KEY: ${{ secrets.GITEE_SSH_KEY }}
       HF_USER: ${{ secrets.HF_USER }}
       HF_TOKEN: ${{ secrets.HF_TOKEN }}
       CODEBERG_USER: ${{ secrets.CODEBERG_USER }}
@@ -46,11 +52,29 @@ jobs:
       # ── Gitee（码云） ──
       - name: Mirror to Gitee
         id: gitee
-        if: ${{ env.GITEE_TOKEN != '' }}
+        if: ${{ env.GITEE_TOKEN != '' || env.GITEE_SSH_KEY != '' }}
         continue-on-error: true
         run: |
           set -eo pipefail
-          git remote add gitee "https://${GITEE_USER}:${GITEE_TOKEN}@gitee.com/${GITEE_USER}/xinworen-yaml-mode-switch.git"
+          # ⚠️ 坑 4（2026-09-03）：账号 xinworen_0 归属 Gitee **企业版**（e.gitee.com/xinworen），
+          # 企业安全设置「禁止通过 HTTPS 拉取/推送代码」会让 git over HTTPS 直接 403：
+          #   remote: Pull/Push via HTTPS is forbidden due to enterprise's security setting
+          # 该拦截在**传输层**，与 token 是否有效无关——换新 token 也是 403。
+          # 且 Gitee 的仓库级「部署公钥」恒为只读（DeployKey does not support push code），
+          # 所以可写凭证只能是**个人 SSH 公钥**（POST /api/v5/user/keys）。
+          # → 优先用 secrets.GITEE_SSH_KEY 走 SSH；未配置时回退 HTTPS + token。
+          if [ -n "${GITEE_SSH_KEY:-}" ]; then
+            echo "::notice::Gitee 走 SSH 通道（企业版禁用 HTTPS git）"
+            mkdir -p ~/.ssh && chmod 700 ~/.ssh
+            printf '%s\n' "$GITEE_SSH_KEY" > ~/.ssh/gitee_mirror
+            chmod 600 ~/.ssh/gitee_mirror
+            ssh-keyscan -H gitee.com >> ~/.ssh/known_hosts 2>/dev/null
+            export GIT_SSH_COMMAND="ssh -i $HOME/.ssh/gitee_mirror -o StrictHostKeyChecking=no -o IdentitiesOnly=yes"
+            git remote add gitee "git@gitee.com:${GITEE_USER}/xinworen-yaml-mode-switch.git"
+          else
+            echo "::warning::未配置 GITEE_SSH_KEY，回退 HTTPS（企业版安全设置下会 403）"
+            git remote add gitee "https://${GITEE_USER}:${GITEE_TOKEN}@gitee.com/${GITEE_USER}/xinworen-yaml-mode-switch.git"
+          fi
           git push --force gitee main
 
       # ── Hugging Face（AI 社区曝光，免费） ──
